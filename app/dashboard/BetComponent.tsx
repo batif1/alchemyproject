@@ -15,31 +15,35 @@ import { encodeFunctionData } from "viem";
 const BetComponent = ({ betId }: { betId: number }) => {
   const signer = useSigner();
   const user = useUser();
-  const { client, address } = useSmartAccountClient({ type: "LightAccount" });
+  const { client, address } = useSmartAccountClient({
+    type: "LightAccount",
+  });
   const { sendUserOperationAsync } = useSendUserOperation({
     client,
   });
 
+  // Ensure client is defined before using it
+  if (!client) {
+    console.error("Smart account client is not defined.");
+  }
+
   const approveUSDC = async (amount: number) => {
     try {
-      // Convert the amount to approve to 6 decimal places (USDC has 6 decimals)
-      const amountToApprove = ethers.parseUnits(amount.toString(), 6);
-
-      // Encode the approve function call data
-      const data = new ethers.Interface(usdcAbi).encodeFunctionData("approve", [
-        marketContractAddress,
-        amountToApprove,
-      ]);
-
+      if (!client) {
+        console.error("Client is not initialized.");
+        return;
+      }
       // Send the user operation
       const res = await sendUserOperationAsync({
         uo: {
-          target: usdcContractAddress as `0x${string}`,
+          target: usdcContractAddress,
           data: encodeFunctionData({
             abi: usdcAbi,
             functionName: "approve",
-            args: [],
-            // value: BigInt(0),
+            args: [
+              marketContractAddress,
+              BigInt(ethers.parseUnits(amount.toString(), 6)),
+            ],
           }),
         },
       });
