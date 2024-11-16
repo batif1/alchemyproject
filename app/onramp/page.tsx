@@ -15,6 +15,8 @@ const MoonPayBuyWidget = dynamic(
   { ssr: false }
 );
 
+
+
 const handleGetSignature = async (url: string): Promise<string> => {
   try {
     const response = await fetch(`/api/sign-url?url=${encodeURIComponent(url)}`);
