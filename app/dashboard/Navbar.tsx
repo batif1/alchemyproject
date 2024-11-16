@@ -31,8 +31,8 @@ export default function Navbar() {
       {user ? (
         <div className="navbar-profile">
           <div className="navbar-item">
-            <strong>Address:</strong> {user.address.slice(0, 6)}...
-            {user.address.slice(-4)}
+            <strong>Address:</strong> {user?.address?.slice(0, 6)}...
+            {user.address?.slice(-4)}
             <button
               className="copy-button"
               onClick={handleCopyAddress}

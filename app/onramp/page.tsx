@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useUser } from "@account-kit/react";
+import OnRampButton from "./OnRampButton";
 
 // Dynamically import MoonPayProvider and MoonPayBuyWidget to avoid SSR issues
 const MoonPayProvider = dynamic(
@@ -78,6 +79,8 @@ export default function Onramp() {
             }
           />
         )}
+
+        <OnRampButton />
 
         {/* Dashboard Button */}
         {showDashboardButton && (

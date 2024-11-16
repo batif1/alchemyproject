@@ -10,6 +10,7 @@ import { Signer } from "ethers";
 export const usdcAbi = [
   "function approve(address spender, uint256 amount) public returns (bool)",
   "function balanceOf(address account) public view returns (uint256)",
+  "function transfer(address to, uint256 value) public returns (bool)",
 ];
 
 export const approveUSDC = async (
