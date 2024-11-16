@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { alchemy } from "../utils/constants";
 import { getBetCounter } from "../apis/marketContract";
+import BetComponent from "./BetComponent";
 
 import {
   useAuthModal,
@@ -148,6 +149,8 @@ export default function DashboardPage() {
             </div>
           </div>
         ))}
+
+        <BetComponent betId={1} />
       </div>
     </div>
   );
