@@ -1,27 +1,74 @@
-.user-component {
-  position: absolute; /* Position it relative to the closest positioned ancestor */
-  top: 20px; /* 20px from the top of the container */
-  left: 20px; /* 20px from the left of the container */
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  max-width: 300px;
-  background-color: white; /* Set a distinct background color */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a slight shadow for card appearance */
-  z-index: 1000; /* Ensure it appears above other elements */
-  font-family: Arial, sans-serif; /* Optional: Adjust font family */
+/* Navbar styles */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1f2937; /* Dark gray background */
+  padding: 10px 20px;
+  color: #ffffff;
 }
 
-.logout-button {
+/* Title in the center */
+.navbar-title {
+  flex: 1;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Profile info on the right */
+.navbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Individual item styles */
+.navbar-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   padding: 5px 10px;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8rem;
+  border-radius: 5px;
+  background-color: #374151; /* Lighter gray background */
+  font-size: 0.9rem;
 }
 
-.logout-button:hover {
-  background-color: #005bb5;
+/* Button styles */
+.navbar-login,
+.navbar-logout {
+  padding: 5px 15px;
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.navbar-login:hover,
+.navbar-logout:hover {
+  background-color: #2563eb;
+}
+
+/* Copy button styles */
+.copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 1rem;
+  padding: 2px;
+  transition: transform 0.2s;
+}
+
+.copy-button:hover {
+  transform: scale(1.1);
+}
+
+/* Copy success message */
+.copy-success {
+  margin-left: 5px;
+  color: #22c55e;
+  font-size: 0.8rem;
 }
