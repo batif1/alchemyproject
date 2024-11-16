@@ -11,6 +11,7 @@ import { getBetCounter } from "../apis/marketContract";
 import BetComponent from "./BetComponent";
 import { getTokenBalance } from "../apis/alchemy";
 import { usdcContractAddress } from "../utils/constants";
+// import UserComponent from "./UserComponent";
 
 export default function DashboardPage() {
   const [cashAmounts, setCashAmounts] = useState<Record<number, string>>({});
