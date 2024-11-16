@@ -5,6 +5,7 @@ import {
 } from "@account-kit/react";
 import { alchemy, sepolia } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
+import { ALCHEMY_API_KEY } from "./app/utils/constants";
 
 const uiConfig: AlchemyAccountsUIConfig = {
   illustrationStyle: "outline",
@@ -29,7 +30,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
 
 export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "TuuJvmiqeMyy5a9RXX6wewjTdEVpg3T0" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
+    transport: alchemy({ apiKey: ALCHEMY_API_KEY as string }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
     chain: sepolia,
     ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
     storage: cookieStorage, // more about persisting state with cookies: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state

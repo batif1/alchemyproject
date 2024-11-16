@@ -8,13 +8,14 @@ import {
 // ABI of the USDC contract (for the approve function)
 const usdcAbi = [
   "function approve(address spender, uint256 amount) public returns (bool)",
+  "function balanceOf(address account) public view returns (uint256)",
 ];
 
 // Create an instance of the USDC contract
 const usdcContract = new ethers.Contract(usdcContractAddress, usdcAbi, wallet);
 
 // Call the approve function
-const approveUSDC = async (amount: number) => {
+export const approveUSDC = async (amount: number) => {
   try {
     const amountToApprove = ethers.parseUnits(amount.toString(), 6);
 
@@ -36,4 +37,8 @@ const approveUSDC = async (amount: number) => {
   }
 };
 
-export default approveUSDC;
+export const getBalanceOf = async (userAddress: string) => {
+  const userBalance = await usdcContract.balanceOf(userAddress);
+  // console.log(`User balance: ${ethers.formatUnits(userBalance, 6)} USDC`);
+  return ethers.formatUnits(userBalance, 6);
+};

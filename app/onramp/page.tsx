@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useUser } from "@account-kit/react";
 
 // Dynamically import MoonPayProvider and MoonPayBuyWidget to avoid SSR issues
 const MoonPayProvider = dynamic(
@@ -15,11 +16,11 @@ const MoonPayBuyWidget = dynamic(
   { ssr: false }
 );
 
-
-
 const handleGetSignature = async (url: string): Promise<string> => {
   try {
-    const response = await fetch(`/api/sign-url?url=${encodeURIComponent(url)}`);
+    const response = await fetch(
+      `/api/sign-url?url=${encodeURIComponent(url)}`
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch signature");
     }
@@ -34,9 +35,11 @@ const handleGetSignature = async (url: string): Promise<string> => {
 export default function Onramp() {
   const [visible, setVisible] = useState(false);
   const [showDashboardButton, setShowDashboardButton] = useState(false);
+  const user = useUser();
 
   // Show the button after 30 seconds
   useEffect(() => {
+    console.log(user);
     const timer = setTimeout(() => {
       setShowDashboardButton(true);
     }, 30000); // 30 seconds in milliseconds
