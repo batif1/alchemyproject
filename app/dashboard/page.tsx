@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Alchemy, Network } from "alchemy-sdk";
 
 const settings = {
-    apiKey: "demo", // Replace with your Alchemy API Key.
+    apiKey: "q3-UDC1xZgGs9juLH0JRvrlJRznZ8UBp", // Replace with your Alchemy API Key. - DONE
     network: Network.ETH_MAINNET, // Replace with your network.
 };
 
