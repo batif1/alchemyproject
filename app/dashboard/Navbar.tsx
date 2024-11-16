@@ -1,32 +1,14 @@
 "use client";
 
-import { useAuthModal, useLogout, useUser } from "@account-kit/react";
-import { useEffect, useState } from "react";
-import { getTokenBalance } from "../apis/alchemy";
-import "./UserComponent.css";
-import { usdcContractAddress } from "../utils/constants";
+import { useState } from "react";
+import "./Navbar.css";
+import { useAlchemyAuth } from "../context/AlchemyAuthContext";
 
-export default function UserComponent() {
-  const user = useUser();
-  const { logout } = useLogout();
-  const { openAuthModal } = useAuthModal();
-  const [usdcBalance, setUsdcBalance] = useState<string>("Loading...");
+export default function Navbar() {
+  // Use context to get user details, logout function, auth modal, and USDC balance
+  const { user, logout, openAuthModal, usdcBalance, refreshUsdcBalance } =
+    useAlchemyAuth();
   const [copySuccess, setCopySuccess] = useState<string>("");
-
-  // Fetch the balance on mount and when user address changes
-  useEffect(() => {
-    (async () => {
-      if (user?.address) {
-        const balance = await getTokenBalance(
-          user.address as string,
-          usdcContractAddress
-        );
-        setUsdcBalance(balance || "0");
-      } else {
-        setUsdcBalance("N/A");
-      }
-    })();
-  }, [user?.address]);
 
   // Function to copy the address
   const handleCopyAddress = async () => {
@@ -35,6 +17,11 @@ export default function UserComponent() {
       setCopySuccess("Copied!");
       setTimeout(() => setCopySuccess(""), 2000); // Clear message after 2 seconds
     }
+  };
+
+  // Function to refresh USDC balance manually
+  const handleRefreshBalance = async () => {
+    await refreshUsdcBalance();
   };
 
   return (
@@ -55,18 +42,26 @@ export default function UserComponent() {
             </button>
             {copySuccess && <span className="copy-success">{copySuccess}</span>}
           </div>
-          <p className="navbar-item">
-            <strong>USDC:</strong> {usdcBalance}
-          </p>
+
+          <div className="navbar-item">
+            <strong>USDC Balance:</strong> {usdcBalance}
+            <button
+              className="refresh-button"
+              onClick={handleRefreshBalance}
+              title="Refresh Balance"
+            >
+              🔄
+            </button>
+          </div>
+
           <button onClick={logout} className="navbar-logout">
             Logout
           </button>
         </div>
       ) : (
-        // <button onClick={openAuthModal} className="navbar-login">
-        //   Login
-        // </button>\
-        <p> Login please</p>
+        <button onClick={openAuthModal} className="navbar-login">
+          Login
+        </button>
       )}
     </nav>
   );

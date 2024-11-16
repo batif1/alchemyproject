@@ -4,7 +4,7 @@ import {
   wallet,
   usdcContractAddress,
 } from "../utils/constants";
-
+import { useSigner } from "@account-kit/react";
 // ABI of the USDC contract (for the approve function)
 const usdcAbi = [
   "function approve(address spender, uint256 amount) public returns (bool)",

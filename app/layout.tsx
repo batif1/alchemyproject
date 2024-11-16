@@ -5,13 +5,14 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
 import { Providers } from "./providers";
-import UserComponent from "./dashboard/UserComponent";
+import Navbar from "./dashboard/Navbar";
+import { AlchemyAuthProvider } from "./context/AlchemyAuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Account Kit Quickstart",
-  description: "Account Kit Quickstart NextJS Template",
+  title: "ABC",
+  description: "Account Kit",
 };
 
 export default async function RootLayout({
@@ -30,8 +31,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers initialState={initialState}>
-          <UserComponent />
-          {children}
+          <AlchemyAuthProvider>
+            <Navbar />
+            {children}
+          </AlchemyAuthProvider>
         </Providers>
       </body>
     </html>

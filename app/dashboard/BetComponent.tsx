@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { getBetDetails } from "../apis/marketContract";
 import { formatLocalTimestamp } from "../utils/time";
+import { useSigner } from "@account-kit/react";
 
 const BetComponent = ({ betId }: { betId: number }) => {
+  const signer = useSigner();
+
   const [market, setMarket] = useState<{
     description: string;
     yesPool: number;
@@ -46,8 +49,13 @@ const BetComponent = ({ betId }: { betId: number }) => {
     }));
   };
 
-  const handleBet = (market: any, outcome: string) => {
+  const handleBet = async (
+    market: any,
+    outcome: string,
+    signer: AlchemyWebSigner | null
+  ) => {
     // Implement bet handling logic here, interact with the contract to place the bet
+
     console.log(`Placing bet on ${outcome} for market:`, market);
   };
 
@@ -82,14 +90,14 @@ const BetComponent = ({ betId }: { betId: number }) => {
       <div className="flex gap-4">
         <button
           disabled={market.isResolved}
-          onClick={() => handleBet(market, "Yes")}
+          onClick={() => handleBet(market, "Yes", signer)}
           className="flex-1 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
         >
           Yes
         </button>
         <button
           disabled={market.endTime > Date.now()}
-          onClick={() => handleBet(market, "No")}
+          onClick={() => handleBet(market, "No", signer)}
           className="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
         >
           No
