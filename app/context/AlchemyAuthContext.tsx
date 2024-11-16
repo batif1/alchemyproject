@@ -11,6 +11,7 @@ import {
   useAuthModal,
   useLogout,
   useSignerStatus,
+  useSmartAccountClient,
   useUser,
 } from "@account-kit/react";
 import { getTokenBalance } from "../apis/alchemy";
@@ -36,21 +37,22 @@ const AlchemyAuthContext = createContext<AlchemyAuthContextType | undefined>(
 export const AlchemyAuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const user = useUser();
   const { openAuthModal } = useAuthModal();
   const signerStatus = useSignerStatus();
   const { logout } = useLogout();
+  const { client, address } = useSmartAccountClient({ type: "LightAccount" });
+  const u = useUser();
 
   const [usdcBalance, setUsdcBalance] = useState<string>("Loading...");
 
-  const isLoggedIn = Boolean(user);
+  const isLoggedIn = Boolean(u);
   const isInitializing = signerStatus.isInitializing;
 
   // Function to fetch the USDC balance
   const fetchUsdcBalance = async () => {
-    if (user?.address) {
+    if (address) {
       const balance = await getTokenBalance(
-        user.address as string,
+        address as string,
         usdcContractAddress
       );
       setUsdcBalance(balance || "0");
@@ -69,10 +71,10 @@ export const AlchemyAuthProvider: React.FC<{ children: ReactNode }> = ({
     if (isLoggedIn) {
       fetchUsdcBalance();
     }
-  }, [user?.address, isLoggedIn]);
+  }, [address, isLoggedIn]);
 
   const value = {
-    user,
+    user: { address: address, email: u?.email },
     openAuthModal,
     logout,
     isLoggedIn,

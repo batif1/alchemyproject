@@ -2,10 +2,53 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { getBetDetails } from "../apis/marketContract";
 import { formatLocalTimestamp } from "../utils/time";
-import { useSigner } from "@account-kit/react";
+import { useSigner, useUser } from "@account-kit/react";
+import { approveUSDC, usdcAbi } from "../apis/usdcContractCall";
+import {
+  type UseSendUserOperationResult,
+  useSendUserOperation,
+  useSmartAccountClient,
+} from "@account-kit/react";
+import { marketContractAddress, usdcContractAddress } from "../utils/constants";
+import { encodeFunctionData } from "viem";
 
 const BetComponent = ({ betId }: { betId: number }) => {
   const signer = useSigner();
+  const user = useUser();
+  const { client, address } = useSmartAccountClient({ type: "LightAccount" });
+  const { sendUserOperationAsync } = useSendUserOperation({
+    client,
+  });
+
+  const approveUSDC = async (amount: number) => {
+    try {
+      // Convert the amount to approve to 6 decimal places (USDC has 6 decimals)
+      const amountToApprove = ethers.parseUnits(amount.toString(), 6);
+
+      // Encode the approve function call data
+      const data = new ethers.Interface(usdcAbi).encodeFunctionData("approve", [
+        marketContractAddress,
+        amountToApprove,
+      ]);
+
+      // Send the user operation
+      const res = await sendUserOperationAsync({
+        uo: {
+          target: usdcContractAddress as `0x${string}`,
+          data: encodeFunctionData({
+            abi: usdcAbi,
+            functionName: "approve",
+            args: [],
+            // value: BigInt(0),
+          }),
+        },
+      });
+
+      console.log(res);
+    } catch (error) {
+      console.error("Error during USDC approval:", error);
+    }
+  };
 
   const [market, setMarket] = useState<{
     description: string;
@@ -49,14 +92,26 @@ const BetComponent = ({ betId }: { betId: number }) => {
     }));
   };
 
-  const handleBet = async (
-    market: any,
-    outcome: string,
-    signer: AlchemyWebSigner | null
-  ) => {
+  const handleBetApproval = async (betAmount: number) => {
+    try {
+      if (!signer) {
+        console.error("No signer available, redirecting to login");
+        return;
+      }
+
+      console.log(`Attempting to approve ${betAmount} USDC`);
+      await approveUSDC(betAmount);
+      console.log("USDC approved successfully, proceed with placing the bet.");
+    } catch (error) {
+      console.error("Bet approval failed:", error);
+    }
+  };
+
+  const handleBet = async (betId: number, market: any, outcome: string) => {
     // Implement bet handling logic here, interact with the contract to place the bet
 
     console.log(`Placing bet on ${outcome} for market:`, market);
+    handleBetApproval(parseInt(cashAmounts[betId]));
   };
 
   if (!market) {
@@ -90,14 +145,14 @@ const BetComponent = ({ betId }: { betId: number }) => {
       <div className="flex gap-4">
         <button
           disabled={market.isResolved}
-          onClick={() => handleBet(market, "Yes", signer)}
+          onClick={() => handleBet(betId, market, "Yes")}
           className="flex-1 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
         >
           Yes
         </button>
         <button
           disabled={market.endTime > Date.now()}
-          onClick={() => handleBet(market, "No", signer)}
+          onClick={() => handleBet(betId, market, "No")}
           className="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
         >
           No
