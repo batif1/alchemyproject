@@ -1,13 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { ALCHEMY_API_KEY } from "../utils/constants";
-import { Alchemy, Network } from "alchemy-sdk";
-
-const settings = {
-  apiKey: ALCHEMY_API_KEY, // Replace with your Alchemy API Key. - DONE
-  network: Network.ETH_MAINNET, // Replace with your network.
-};
+import React, { useEffect, useState } from "react";
+import { alchemy } from "../utils/constants";
+import { getBetCounter } from "../apis/marketContract";
 
 import {
   useAuthModal,
@@ -22,10 +17,16 @@ interface Market {
   odds: string;
 }
 
-const alchemy = new Alchemy(settings);
-
 export default function DashboardPage() {
-  // Example data for the cards
+  const [betCount, setBetCount] = useState(0);
+  useEffect(() => {
+    const getCount = async () => {
+      const count = await getBetCounter();
+      setBetCount(count);
+    };
+
+    getCount();
+  }, []);
   const markets: Market[] = [
     {
       id: 1,
