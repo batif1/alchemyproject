@@ -15,6 +15,7 @@
     "@account-kit/react": "^4.0.0",
     "@moonpay/moonpay-react": "^1.8.2",
     "@tanstack/react-query": "^5.50.1",
+    "alchemy-sdk": "^3.5.0",
     "encoding": "^0.1.13",
     "i-": "^1.1.5",
     "next": "^15.0.3",
