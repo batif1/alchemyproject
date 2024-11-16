@@ -487,10 +487,9 @@ export async function getUserWinnings(userAddress: string, betId: number) {
 }
 
 // Get the current bet counter
-export async function getBetCounter() {
+export async function getBetCounter(): Promise<number> {
   const counter = await marketContract.betCounter();
-  console.log("Bet counter:", counter);
-  return counter;
+  return parseInt(counter.toString());
 }
 
 // Get the current donation fee

@@ -4,5 +4,13 @@ export const getTokenBalance = async (
   user_address: string,
   contract_address: string
 ) => {
-  return await alchemy.core.getTokenBalances(user_address, [contract_address]);
+  console.log(user_address, contract_address);
+  try {
+    return await alchemy.core.getTokenBalances(user_address, [
+      contract_address,
+    ]);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
