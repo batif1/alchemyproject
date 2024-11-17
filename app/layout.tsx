@@ -11,7 +11,7 @@ import { AlchemyAuthProvider } from "./context/AlchemyAuthContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ABC",
+  title: "Parity",
   description: "Account Kit",
 };
 

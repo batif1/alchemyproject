@@ -35,13 +35,17 @@ export default function Home() {
               Where every bet brings us closer to a better world. Connect,
               compete, and create impact together.
             </p>
-            {!user && (
+            {!user ? (
               <button
                 onClick={openAuthModal}
                 className="mt-6 px-6 py-3 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold rounded-lg shadow-lg"
               >
                 Get Started
               </button>
+            ) : (
+              <Link href="/dashboard" className="btn btn-primary">
+                View Bets
+              </Link>
             )}
           </div>
         </div>
@@ -75,7 +79,9 @@ export default function Home() {
           <>Loading...</>
         ) : user ? (
           <div>
-            <p className="text-xl font-bold">Welcome back, {user.email ?? "anon"}!</p>
+            <p className="text-xl font-bold">
+              Welcome back, {user.email ?? "anon"}!
+            </p>
             <div className="mt-4">
               <Link href="/onramp" className="btn btn-primary">
                 Go to Onramp Page

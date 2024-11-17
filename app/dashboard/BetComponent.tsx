@@ -142,9 +142,44 @@ const BetComponent = ({ betId }: { betId: number }) => {
 
   const handleBet = async (betId: number, market: any, outcome: string) => {
     console.log(`Placing bet on ${outcome} for market:`, market);
-    handleBetApproval(parseInt(cashAmounts[betId]));
-    // await placeBet(betId, parseInt(cashAmounts[betId]), true);
+    await handleBetApproval(parseInt(cashAmounts[betId]));
+    await placeBet(betId, parseInt(cashAmounts[betId]), true);
   };
+
+  // const handleBet = async (betId: number, market: any, outcome: string) => {
+  //   console.log(`Placing mock bet on ${outcome} for market:`, market);
+
+  //   // Mock approval (skipping actual approval and contract interaction)
+  //   const betAmount = parseInt(cashAmounts[betId]) || 0;
+  //   if (betAmount <= 0) {
+  //     console.error("Invalid bet amount.");
+  //     return;
+  //   }
+
+  //   // Convert betAmount to BigInt and perform arithmetic
+  //   const betAmountInBigInt = BigInt(Math.floor(betAmount * 1e6));
+
+  //   // Mock change based on the bet outcome
+  //   const newYesPool =
+  //     outcome === "Yes" ? market.yesPool + betAmountInBigInt : market.yesPool;
+  //   const newNoPool =
+  //     outcome === "No" ? market.noPool + betAmountInBigInt : market.noPool;
+
+  //   // Update the market state with the new values
+  //   setMarket((prevMarket) => {
+  //     if (!prevMarket) return null;
+  //     return {
+  //       ...prevMarket,
+  //       yesPool: newYesPool,
+  //       noPool: newNoPool,
+  //       totalPool: newYesPool + newNoPool,
+  //     };
+  //   });
+
+  //   console.log(
+  //     `Mock bet placed on ${outcome}. Yes Pool: ${newYesPool}, No Pool: ${newNoPool}`
+  //   );
+  // };
 
   if (!market) {
     return <div>Loading...</div>;

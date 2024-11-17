@@ -26,7 +26,7 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-title">Title</div>
+      <div className="navbar-title">Parity</div>
 
       {user ? (
         <div className="navbar-profile">
