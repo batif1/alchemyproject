@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { marketContractAddress, wallet } from "../utils/constants";
 
 // ABI of the USDC contract (for the approve function)
-const abi = [
+export const abi = [
   {
     inputs: [
       {

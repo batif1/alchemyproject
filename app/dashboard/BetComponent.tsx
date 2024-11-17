@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { getBetDetails } from "../apis/marketContract";
+import { abi, getBetDetails } from "../apis/marketContract";
 import { formatLocalTimestamp } from "../utils/time";
 import { useSigner, useUser } from "@account-kit/react";
 import { approveUSDC, usdcAbi } from "../apis/usdcContractCall";
@@ -105,17 +105,45 @@ const BetComponent = ({ betId }: { betId: number }) => {
 
       console.log(`Attempting to approve ${betAmount} USDC`);
       await approveUSDC(betAmount);
+
       console.log("USDC approved successfully, proceed with placing the bet.");
     } catch (error) {
       console.error("Bet approval failed:", error);
     }
   };
 
-  const handleBet = async (betId: number, market: any, outcome: string) => {
-    // Implement bet handling logic here, interact with the contract to place the bet
+  const placeBet = async (betId: number, amount: number, betOnYes: boolean) => {
+    try {
+      if (!client) {
+        console.error("Client is not initialized.");
+        return;
+      }
+      // Send the user operation
+      const res = await sendUserOperationAsync({
+        uo: {
+          target: marketContractAddress,
+          data: encodeFunctionData({
+            abi: abi,
+            functionName: "placeBet",
+            args: [
+              BigInt(betId),
+              BigInt(ethers.parseUnits(amount.toString(), 6)),
+              betOnYes,
+            ],
+          }),
+        },
+      });
 
+      console.log(res);
+    } catch (error) {
+      console.error("Error during USDC approval:", error);
+    }
+  };
+
+  const handleBet = async (betId: number, market: any, outcome: string) => {
     console.log(`Placing bet on ${outcome} for market:`, market);
     handleBetApproval(parseInt(cashAmounts[betId]));
+    // await placeBet(betId, parseInt(cashAmounts[betId]), true);
   };
 
   if (!market) {
@@ -143,6 +171,7 @@ const BetComponent = ({ betId }: { betId: number }) => {
         value={cashAmounts[betId] || ""}
         onChange={(e) => handleCashChange(betId, e.target.value)}
         className="w-full mb-4 p-2 border border-gray-300 rounded"
+        disabled={market.isResolved}
       />
 
       {/* Yes and No Buttons */}
@@ -150,14 +179,14 @@ const BetComponent = ({ betId }: { betId: number }) => {
         <button
           disabled={market.isResolved}
           onClick={() => handleBet(betId, market, "Yes")}
-          className="flex-1 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
+          className="flex-1 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition disabled:bg-green-300"
         >
           Yes
         </button>
         <button
           disabled={market.endTime > Date.now()}
           onClick={() => handleBet(betId, market, "No")}
-          className="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
+          className="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition disabled:bg-red-300"
         >
           No
         </button>
